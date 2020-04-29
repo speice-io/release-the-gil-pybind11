@@ -1,0 +1,10 @@
+.clangd/
+build/
+__pycache__/
+.eggs/
+.pytest_cache/
+*.egg-info/
+tmp/
+
+compile_commands.json
+*.so
