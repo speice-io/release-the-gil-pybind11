@@ -22,39 +22,32 @@ inline std::uint64_t fibonacci(std::uint64_t n) {
   return c;
 }
 
-std::uint64_t pybind_gil(std::uint64_t n) {
+std::uint64_t fibonacci_gil(std::uint64_t n) {
   // The GIL is held by default when entering C++ from Python, so we need no
-  // manipulation here.
-  // Interestingly enough, re-acquiring a held GIL is a safe operation,
-  // so feel free to scatter `py::gil_scoped_acquire` throughout the code.
+  // manipulation here. Interestingly enough, re-acquiring a held GIL is a safe
+  // operation (within the same thread), so feel free to scatter
+  // `py::gil_scoped_acquire` throughout the code.
   return fibonacci(n);
 }
 
-std::uint64_t pybind_nogil(std::uint64_t n) {
+std::uint64_t fibonacci_nogil(std::uint64_t n) {
   // Because the GIL is held by default, we need to explicitly release it here.
   // Note that like Cython, releasing the lock multiple times will crash the
   // interpreter.
+
   py::gil_scoped_release release;
   return fibonacci(n);
 }
 
 PYBIND11_MODULE(fibonacci, m) {
-  m.doc() = R"pbdoc(
-        Pybind11 Fibonacci plugin
-        -----------------------
-        .. currentmodule:: fibonacci
-        .. autosummary::
-           :toctree: _generate
-           pybind_gil
-           pybind_nogil
-    )pbdoc";
 
-  m.def("pybind_nogil", &pybind_nogil, R"pbdoc(
-        Calculate the Nth Fibonacci number after explicitly unlocking the GIL
+  m.def("fibonacci_gil", &fibonacci_gil, R"pbdoc(
+        Calculate the Nth Fibonacci number while implicitly holding the GIL 
     )pbdoc");
 
-  m.def("pybind_gil", &pybind_gil, R"pbdoc(
-        Calculate the Nth Fibonacci number while implicitly holding the GIL 
+  m.def("fibonacci_nogil", &fibonacci_nogil,
+        R"pbdoc(
+        Calculate the Nth Fibonacci number after explicitly unlocking the GIL
     )pbdoc");
 
 #ifdef VERSION_INFO
