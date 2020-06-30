@@ -39,6 +39,11 @@ std::uint64_t fibonacci_nogil(std::uint64_t n) {
   return fibonacci(n);
 }
 
+void recurse_unlock() {
+  py::gil_scoped_release release;
+  return recurse_unlock();
+}
+
 PYBIND11_MODULE(speiceio_pybind11, m) {
 
   m.def("fibonacci_gil", &fibonacci_gil, R"pbdoc(
@@ -49,6 +54,10 @@ PYBIND11_MODULE(speiceio_pybind11, m) {
         R"pbdoc(
         Calculate the Nth Fibonacci number after explicitly unlocking the GIL
     )pbdoc");
+
+  m.def("recurse_unlock", &recurse_unlock, R"pbdoc(
+        Recursively unlock the GIL and crash the interpreter
+  )pbdoc");
 
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
