@@ -113,5 +113,6 @@ setup(
     ext_modules=ext_modules,
     setup_requires=["pybind11>=2.5.0"],
     cmdclass={"build_ext": BuildExt},
+    package_data={"speiceio_pybind11": ["py.typed"]},
     zip_safe=False,
 )
