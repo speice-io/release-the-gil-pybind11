@@ -39,7 +39,7 @@ std::uint64_t fibonacci_nogil(std::uint64_t n) {
   return fibonacci(n);
 }
 
-PYBIND11_MODULE(fibonacci, m) {
+PYBIND11_MODULE(speiceio_pybind11, m) {
 
   m.def("fibonacci_gil", &fibonacci_gil, R"pbdoc(
         Calculate the Nth Fibonacci number while implicitly holding the GIL 
