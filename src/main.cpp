@@ -10,9 +10,8 @@ inline std::uint64_t fibonacci(std::uint64_t n) {
 
   std::uint64_t a = 0;
   std::uint64_t b = 1;
-  std::uint64_t c = 0;
+  std::uint64_t c = a + b;
 
-  c = a + b;
   for (std::uint64_t _i = 2; _i < n; _i++) {
     a = b;
     b = c;
